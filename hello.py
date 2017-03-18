@@ -1,4 +1,6 @@
 import os
+from threading import Thread
+
 from flask import Flask, render_template, redirect, session, url_for, flash
 from flask_script import Manager, Shell
 from flask_bootstrap import Bootstrap
@@ -19,11 +21,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = \
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #  mail
+# please config the mail server in INI file
 app.config['MAIL_SERVER'] = 'smtp.163.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = 'keer2345'
+# INI file
+app.config['MAIL_USERNAME'] = 'keer2345@163.com'
+# INI file
 app.config['MAIL_PASSWORD'] = 'password'
 app.config['FLASKY_MAIL_SUBJECT_PREFIX'] = '[Flasky Subject]'
 app.config['FLASKY_MAIL_SENDER'] = 'Flasky Admin <keer2345@163.com>'
@@ -57,13 +62,21 @@ class User(db.Model):
         return '<User %r>' % self.username
 
 
+def send_async_email(app, msg):
+    with app.app_context():
+        mail.send(msg)
+
+
 def send_mail(to, subject, template, **kwargs):
     msg = Message(app.config['FLASKY_MAIL_SUBJECT_PREFIX'] + ' ' + subject,
                   sender=app.config['FLASKY_MAIL_SENDER'],
                   recipients=[to])
     msg.body = render_template(template + '.txt', **kwargs)
     msg.html = render_template(template + '.html', **kwargs)
-    mail.send(msg)
+
+    thr = Thread(target=send_async_email, args=[app, msg])
+    thr.start()
+    return thr
 
 
 class NameForm(Form):
