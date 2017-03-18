@@ -7,6 +7,7 @@ from flask_wtf import Form
 from wtforms import StringField, SubmitField
 from wtforms.validators import Required
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate, MigrateCommand
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -21,6 +22,7 @@ manager = Manager(app)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
 db = SQLAlchemy(app)
+migrage = Migrate(app, db)
 
 
 class Role(db.Model):
@@ -53,6 +55,7 @@ def make_shell_context():
 
 
 manager.add_command("shell", Shell(make_context=make_shell_context))
+manager.add_command('db', MigrateCommand)
 
 
 @app.route('/', methods=['GET', 'POST'])
