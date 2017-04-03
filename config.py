@@ -9,7 +9,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAIL_SERVER = 'smtp.163.com'
     MAIL_PORT = 465
-    MAIL_USE_TLS = True
+    # MAIL_USE_TLS = True
     MAIL_USE_SSL = True
     MAIL_USERNAME = 'keer2345@163.com'
     MAIL_PASSWORD = '912229hui'
