@@ -7,14 +7,20 @@ from app.models import User
 
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Length(1, 64), Email()])
+    email = StringField(
+        'Email', validators=[
+            DataRequired(), Length(
+                1, 64), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Keep me logged in')
     submit = SubmitField('Login')
 
 
 class RegistrationForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Length(1, 64), Email()])
+    email = StringField(
+        'Email', validators=[
+            DataRequired(), Length(
+                1, 64), Email()])
     username = StringField('Username', validators=[DataRequired(), Length(1, 64),
                                                    Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
                                                           'Username must have only letters, '
@@ -37,5 +43,32 @@ class ChangePasswordForm(FlaskForm):
     old_password = PasswordField('Old Password', validators=[DataRequired()])
     password = PasswordField('New Password',
                              validators=[DataRequired(), EqualTo('password2', message='Password must match')])
-    password2 = PasswordField('Confirm new password', validators=[DataRequired()])
+    password2 = PasswordField(
+        'Confirm new password',
+        validators=[
+            DataRequired()])
     submit = SubmitField('Update Password')
+
+
+class PasswordResetRequestForm(FlaskForm):
+    email = StringField(
+        'Email', validators=[
+            DataRequired(), Length(
+                1, 64), Email()])
+    submit = SubmitField('Reset Password')
+
+
+class PasswordResetForm(FlaskForm):
+    email = StringField(
+        'Email', validators=[
+            DataRequired(), Length(
+                1, 64), Email()])
+    password = PasswordField('New Password',
+                             validators=[DataRequired(), EqualTo('password2', message='Password must match')])
+    password2 = PasswordField('Confirm Password', validators=[DataRequired()])
+    submit = SubmitField('Reset Password')
+
+    def validate_email(self, field):
+        print '>>>>>>>>>>>>>>>=================<<<<<<<<<<<<<<<<<<<<<'
+        if User.query.filter_by(email=field.data).first() is None:
+            raise ValidationError('Unknown email address')
