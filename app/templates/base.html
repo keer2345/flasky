@@ -24,7 +24,9 @@
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="/">Home</a></li>
-                        <li><a href="#">Abourt</a></li>
+                        {% if current_user.is_authenticated %}
+                            <li><a href="{{ url_for('main.user',username=current_user.username) }}">Profile</a></li>
+                        {% endif %}
                         <li><a href="#">Contact</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
@@ -52,11 +54,11 @@
                             {#                            <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>#}
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{{ url_for('auth.change_password') }}">Change Password</a></li>
-                                <li><a href="{{ url_for('auth.change_email_request') }}">Change Email</a></li>
-                                <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
-                            </ul>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ url_for('auth.change_password') }}">Change Password</a></li>
+                                    <li><a href="{{ url_for('auth.change_email_request') }}">Change Email</a></li>
+                                    <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                                </ul>
                             </li>
                         {% else %}
                             <li><a href="{{ url_for('auth.login') }}">Login</a></li>
