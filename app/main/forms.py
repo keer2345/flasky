@@ -18,7 +18,10 @@ class EditProfileForm(FlaskForm):
 
 
 class EditProfileAdminForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Length(1, 64), Email()])
+    email = StringField(
+        'Email', validators=[
+            DataRequired(), Length(
+                1, 64), Email()])
     username = StringField('Username',
                            validators=[DataRequired(), Length(1, 64),
                                        Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
@@ -46,3 +49,8 @@ class EditProfileAdminForm(FlaskForm):
         if field.data != self.user.username and \
                 User.query.filter_by(username=field.data).first():
             raise ValidationError('Username already in use.')
+
+
+class PostForm(FlaskForm):
+    body = TextAreaField("What's on your mind?", validators=[DataRequired()])
+    submit = SubmitField('Submit')
