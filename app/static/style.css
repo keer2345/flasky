@@ -45,12 +45,17 @@ div.post-content {
     min-height: 48px;
 }
 
+div.post-footer {
+    text-align: right;
+}
+
 dev.pagination {
     width: 100%;
     text-align: right;
     padding: 0px;
     margin: 0px;
 }
+
 div.flask-pagedown-preview {
     margin: 10px 0px 10px 0px;
     border: 1px solid #e0e0e0;
